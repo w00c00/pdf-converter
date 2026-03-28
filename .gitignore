@@ -1,0 +1,29 @@
+# 核心忽略
+node_modules/
+uploads/
+outputs/
+.env
+
+# 物理忽略包含 Token 的调试脚本
+*.ps1
+*.bat
+*.zip
+*.log
+
+# 忽略临时备份和状态
+.omg/
+MEMORY.md
+TEST_RESULTS.md
+final-deploy-stack.yml
+portainer-debian-stack.yml
+portainer-stack-fixed.yml
+portainer-stack.yml
+docker-compose-fixed.yml
+server-free-portable.js
+server-zamzar.js
+server-fixed.js
+package-free.json
+
+# 忽略操作系统文件
+.DS_Store
+Thumbs.db

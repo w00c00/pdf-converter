@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF转换�?- PDF to Word/JPG</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📄 PDF转换�?/h1>
+            <p>支持将PDF文件转换为Word和JPG格式</p>
+        </header>
+
+        <main>
+            <div class="upload-area" id="dropZone">
+                <div class="upload-icon">📁</div>
+                <h2>拖放PDF文件到此�?/h2>
+                <p>或者点击选择文件</p>
+                <input type="file" id="fileInput" accept=".pdf" hidden>
+                <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                    选择PDF文件
+                </button>
+            </div>
+
+            <div id="fileInfo" class="file-info hidden">
+                <div class="file-details">
+                    <span class="file-name" id="fileName"></span>
+                    <span class="file-size" id="fileSize"></span>
+                </div>
+                <button class="btn btn-danger" onclick="clearFile()">清除文件</button>
+            </div>
+
+            <div class="conversion-options" id="conversionOptions">
+                <h3>选择转换格式</h3>
+                <div class="format-buttons">
+                    <button class="format-btn" data-format="docx" onclick="selectFormat('docx')">
+                        <span class="format-icon">📝</span>
+                        <span class="format-name">Word (DOCX)</span>
+                    </button>
+                    <button class="format-btn" data-format="jpg" onclick="selectFormat('jpg')">
+                        <span class="format-icon">🖼�?/span>
+                        <span class="format-name">JPG 图片</span>
+                    </button>
+                </div>
+                <button class="btn btn-success btn-convert" id="convertBtn" onclick="startConversion()" disabled>
+                    开始转�?
+                </button>
+            </div>
+
+            <div id="progressArea" class="progress-area hidden">
+                <h3>转换进度</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p class="progress-text" id="progressText">准备�?..</p>
+            </div>
+
+            <div id="resultArea" class="result-area hidden">
+                <h3>�?转换完成!</h3>
+                <div class="download-section">
+                    <a id="downloadLink" class="btn btn-success btn-download" download>
+                        下载转换后的文件
+                    </a>
+                </div>
+                <button class="btn btn-secondary" onclick="resetConverter()">
+                    转换其他文件
+                </button>
+            </div>
+
+            <div id="errorArea" class="error-area hidden">
+                <h3>�?转换失败</h3>
+                <p id="errorMessage"></p>
+                <button class="btn btn-secondary" onclick="resetConverter()">
+                    重试
+                </button>
+            </div>
+        </main>
+
+        <footer>
+            <p>使用免费的在线API进行转换 | 支持Docker部署</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  pdf-converter:
+    image: node:18-bullseye-slim
+    container_name: pdf-converter
+    restart: unless-stopped
+    ports:
+      - "3456:3456"
+    environment:
+      - NODE_ENV=production
+      - PORT=3456
+      - BASE_URL=http://127.0.0.1:3456
+    volumes:
+      - pdf-uploads:/app/uploads
+      - pdf-outputs:/app/outputs
+    working_dir: /app
+    command: >
+      sh -c "
+        apt-get update && apt-get install -y imagemagick ghostscript tini wget &&
+        sed -i 's/policy domain=\"coder\" rights=\"none\" pattern=\"PDF\"/policy domain=\"coder\" rights=\"read|write\" pattern=\"PDF\"/' /etc/ImageMagick-6/policy.xml || true &&
+        mkdir -p uploads outputs &&
+        npm install express multer cors uuid pdfjs-dist docx axios &&
+        node server-free.js
+      "
+volumes:
+  pdf-uploads:
+  pdf-outputs:
