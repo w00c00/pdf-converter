@@ -1,19 +1,19 @@
-# PDF转换�?- Portainer部署方案
+# PDF转换器 - Portainer部署方案
 
-## ⚠️ YAML Stack的局限�?
-Portainer的Stack编辑器不支持复杂的Shell heredoc语法。推荐使用以下两种方案之一�?
+## ⚠️ YAML Stack的局限性
+Portainer的Stack编辑器不支持复杂的Shell heredoc语法。推荐使用以下两种方案之一
 ---
 
 ## 🎯 方案A: 直接上传项目文件（推荐，最简单）
 
-### 步骤1: 在Portainer中创建容�?
+### 步骤1: 在Portainer中创建容器
 1. 进入Portainer: http://127.0.0.1:9000
 2. 点击左侧 **"Containers"**
 3. 点击 **"+ Add container"**
 
 ### 步骤2: 配置容器
 
-填写以下信息�?
+填写以下信息：
 **基础配置**:
 - **Name**: `pdf-converter`
 - **Image**: `node:18-alpine`
@@ -35,7 +35,7 @@ Portainer的Stack编辑器不支持复杂的Shell heredoc语法。推荐使用�
   - Value: `http://127.0.0.1:3456`
 - 点击 **"+ Add an environment variable"**
   - Name: `CLOUDCONVERT_API_KEY`
-  - Value: `(你的API密钥，可�?`
+  - Value: `(你的API密钥，可选)`
 
 **Volumes**:
 - 点击 **"+ Add a volume"**
@@ -47,7 +47,7 @@ Portainer的Stack编辑器不支持复杂的Shell heredoc语法。推荐使用�
   - **Container**: `/app/outputs`
   - **Host**: `pdf-outputs`
 
-### 步骤3: 创建持久化目�?
+### 步骤3: 创建持久化目录
 在Portainer的Web终端中：
 1. 点击左侧 **"Volumes"**
 2. 点击 **"+ Create a volume"**
@@ -55,8 +55,8 @@ Portainer的Stack编辑器不支持复杂的Shell heredoc语法。推荐使用�
 4. 点击 **"Create the volume"**
 5. 重复创建 `pdf-outputs`
 
-### 步骤4: 复制项目文件到容�?
-创建容器后，通过Web终端�?
+### 步骤4: 复制项目文件到容器
+创建容器后，通过Web终端：
 ```bash
 # 进入容器
 docker exec -it pdf-converter sh
@@ -126,12 +126,12 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
         if (!req.file) return res.status(400).json({ success: false, error: 'No file uploaded' });
         const format = req.body.format;
         if (!['docx', 'jpg'].includes(format)) return res.status(400).json({ success: false, error: 'Invalid format' });
-        
+
         if (!API_KEY) {
             const result = await mockConversion(req.file, format);
             return res.json(result);
         }
-        
+
         const result = await convertWithCloudConvert(req.file, format, API_KEY);
         res.json(result);
     } catch (error) {
@@ -209,30 +209,32 @@ node server.js
 
 ### 步骤5: 保持容器运行
 
-如果需要保持容器在后台运行�?1. 停止当前的交互式会话
-2. 重启容器并设置command�?`node server.js`
+如果需要保持容器在后台运行：
+1. 停止当前的交互式会话
+2. 重启容器并设置command为 `node server.js`
 
 ---
 
-## 🎯 方案B: 使用Docker Volume（需要GitHub�?
-如果你有GitHub仓库�?
-1. 创建GitHub仓库，上传项目文�?2. 在Stack中使用：
+## 🎯 方案B: 使用Docker Volume（需要GitHub仓库）
+如果你有GitHub仓库：
+1. 创建GitHub仓库，上传项目文件
+2. 在Stack中使用：
 
 ```yaml
 command: >
-  sh -c "apk add --no-cache git && 
-         git clone https://github.com/YOUR_USERNAME/pdf-converter.git /app && 
-         cd /app && 
-         npm install && 
+  sh -c "apk add --no-cache git &&
+         git clone https://github.com/YOUR_USERNAME/pdf-converter.git /app &&
+         cd /app &&
+         npm install &&
          node server.js"
 ```
 
 ---
 
-## 📋 快速检查清�?
+## 📋 快速检查清单
 容器创建后确认：
 
-- [ ] 容器状�? **Running**
+- [ ] 容器状态 **Running**
 - [ ] 端口: `3456:3456`
 - [ ] 环境变量: `PORT=3456`
 - [ ] 环境变量: `BASE_URL=http://127.0.0.1:3456`
@@ -242,7 +244,8 @@ command: >
 
 ---
 
-## 🆘 遇到问题�?
-请告诉我�?1. 容器创建到哪一步？
+## 🆘 遇到问题？
+请告诉我：
+1. 容器创建到哪一步？
 2. 看到的错误信息？
-3. 截图或错误日�?
+3. 截图或错误日志？
