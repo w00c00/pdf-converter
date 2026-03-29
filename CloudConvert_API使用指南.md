@@ -2,19 +2,21 @@
 
 ## 📊 定价信息
 
-CloudConvert **不是完全免费** 的，但提供了一定的免费额度�?
+CloudConvert **不是完全免费** 的，但提供了一定的免费额度
 ### 免费额度
-- **免费注册账户**: 25分钟转换时间/�?- 积分系统: 根据转换类型和时间消耗积�?  - PDF转Word (DOCX): **4积分/�?*（最低消费）
-  - PDF转JPG: **1积分/�?*（最低消费）
-  - 普通转�? 1积分/分钟
+- **免费注册账户**: 25分钟转换时间/天
+- 积分系统: 根据转换类型和时间消耗积分
+  - PDF转Word (DOCX): **4积分/次*（最低消费）
+  - PDF转JPG: **1积分/次*（最低消费）
+  - 普通转换: 1积分/分钟
 
 ### 付费套餐
 | 套餐 | 价格 | 转换时间 |
 |------|------|----------|
-| Free | $0 | 25分钟/�?|
-| Starter | $9/�?| 100分钟/�?|
-| Professional | $29/�?| 500分钟/�?|
-| Business | $79/�?| 2000分钟/�?|
+| Free | $0 | 25分钟/天 |
+| Starter | $9/月 | 100分钟/月 |
+| Professional | $29/月 | 500分钟/月 |
+| Business | $79/月 | 2000分钟/月 |
 
 ## 🔑 获取API密钥
 
@@ -27,9 +29,11 @@ CloudConvert **不是完全免费** 的，但提供了一定的免费额度�?
 1. 登录账户
 2. 访问 https://cloudconvert.com/dashboard/api
 3. 点击"Create API Key"
-4. 选择权限范围（建议选择所有Tasks & Jobs权限�?5. 复制API密钥
+4. 选择权限范围（建议选择所有Tasks & Jobs权限）
+5. 复制API密钥
 
-### 步骤3: 配置到项�?创建 `.env` 文件（复制自 `.env.example`）：
+### 步骤3: 配置到项目
+创建 `.env` 文件（复制自 `.env.example`）：
 ```env
 CLOUDCONVERT_API_KEY=your_api_key_here
 BASE_URL=http://localhost:3000
@@ -38,7 +42,7 @@ PORT=3000
 
 ## 📝 API使用示例
 
-### Node.js中使�?
+### Node.js中使用
 ```javascript
 const axios = require('axios');
 
@@ -71,48 +75,53 @@ async function createJob(filePath, outputFormat) {
             }
         }
     );
-    
+
     return response.data.data;
 }
 ```
 
 ## 🆓 免费替代方案
 
-如果你不想使用付费API，可以考虑以下免费替代方案�?
-### 方案1: 使用本地转换库（推荐�?
-使用 `pdf2pic` �?`mammoth` 等本地库�?
+如果你不想使用付费API，可以考虑以下免费替代方案
+### 方案1: 使用本地转换库（推荐）
+使用 `pdf2pic` 和 `mammoth` 等本地库
 ```bash
 npm install pdf2pic mammoth
 ```
 
-**优点**�?- 完全免费
+**优点**：
+- 完全免费
 - 离线可用
-- 无文件大小限�?
-**缺点**�?- 需要服务器有足够的处理能力
-- 需要安装ImageMagick等依�?
+- 无文件大小限制
+**缺点**：
+- 需要服务器有足够的处理能力
+- 需要安装ImageMagick等依赖
 ### 方案2: 使用免费在线API
 
-1. **PDFLayer** (免费100请求/�?
+1. **PDFLayer** (免费100请求/月)
    - https://pdflayer.com
-   - 主要用于PDF创建，不是转�?
-2. **DocPub** (免费500�?�?
+   - 主要用于PDF创建，不是转换
+2. **DocPub** (免费500页/月)
    - https://www.docpub.org
-   - PDF转HTML, ePub�?
-3. **Zamzar** (免费1GB/�?
+   - PDF转HTML, ePub
+3. **Zamzar** (免费1GB/月)
    - https://www.zamzar.com
-   - 需要上传到第三�?
+   - 需要上传到第三方
 ### 方案3: 自建转换服务
 
-使用开源库自建�?- **LibreOffice**: 命令行转换PDF
-- **ImageMagick**: PDF转图�?- **unoconv**: Linux下的文档转换
+使用开源库自建
+- **LibreOffice**: 命令行转换PDF
+- **ImageMagick**: PDF转图片
+- **unoconv**: Linux下的文档转换
 
 ## 🔧 项目配置
 
 ### 当前配置
-项目已配置CloudConvert支持，修�?`server.js`:
+项目已配置CloudConvert支持，修改 `server.js`:
 
 ```javascript
-// 使用真实API（需配置API密钥�?if (process.env.CLOUDCONVERT_API_KEY) {
+// 使用真实API（需配置API密钥）
+if (process.env.CLOUDCONVERT_API_KEY) {
     const result = await convertWithCloudConvert(req.file, format, apiKey);
 }
 
@@ -122,7 +131,7 @@ else {
 }
 ```
 
-### 切换到本地转�?
+### 切换到本地转换
 如需使用免费本地库，修改 `server.js`:
 
 ```javascript
@@ -140,8 +149,9 @@ async function convertToJpg(filePath, outputDir) {
         width: 1200,
         height: 1200
     });
-    
-    const result = await convert(1); // 转换第一�?    return result;
+
+    const result = await convert(1); // 转换第一页
+    return result;
 }
 
 // PDF转Word
@@ -154,20 +164,22 @@ async function convertToDocx(filePath, outputPath) {
 
 ## ⚠️ 注意事项
 
-1. **安全�?*: 不要在客户端暴露API密钥
+1. **安全性**: 不要在客户端暴露API密钥
 2. **隐私**: 上传文件到第三方服务可能涉及隐私问题
-3. **限制**: 注意API的速率限制和每日配�?4. **成本**: 批量转换时注意成本控�?5. **备份**: 重要文件转换前先备份
+3. **限制**: 注意API的速率限制和每日配额
+4. **成本**: 批量转换时注意成本控制
+5. **备份**: 重要文件转换前先备份
 
 ## 📞 获取帮助
 
 - 官方文档: https://cloudconvert.com/api/v2
-- API状�? https://status.cloudconvert.com
+- API状态: https://status.cloudconvert.com
 - 支持邮箱: support@cloudconvert.com
 
 ## 💡 推荐方案
 
-根据你的需求，推荐以下方案�?
+根据你的需求，推荐以下方案：
 1. **个人使用/测试**: 使用模拟模式 + 免费API配额
-2. **小规模使�?*: CloudConvert Starter套餐�?9/月）
-3. **大规模使�?*: 自建LibreOffice服务 + 免费
-4. **企业�?*: CloudConvert Enterprise定制方案
+2. **小规模使用**: CloudConvert Starter套餐（$9/月）
+3. **大规模使用**: 自建LibreOffice服务 + 免费
+4. **企业用户**: CloudConvert Enterprise定制方案
